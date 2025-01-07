@@ -235,9 +235,7 @@ namespace TwpfTool
 
             long offsetToParamTagDefs = writer.BaseStream.Position;
             for (int i = 0; i < paramTagDefs.Count; i++)
-            {
                 writer.Write(0);
-            }
 
             foreach (TwpParamTagDefs paramTagDef in paramTagDefs)
             {

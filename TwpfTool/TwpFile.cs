@@ -17,21 +17,16 @@ namespace TwpfTool
             //header
             string signature = new string(reader.ReadChars(7));
             if (signature != sign)
-            {
                 throw new ArgumentOutOfRangeException();
-            }
             byte version = reader.ReadByte();
             if (version!=1)
-            {
                 throw new ArgumentOutOfRangeException();
-            }
             uint headerSize = reader.ReadUInt32();
             if (headerSize!=reader.BaseStream.Position)
-            {
                 throw new ArgumentOutOfRangeException();
-            }
             if (Program.IsVerbose)
                 Console.WriteLine($"{signature} v{version}, header size: {headerSize}");
+
             //offsets
             int groupCount = reader.ReadInt32();
             int tagCount = reader.ReadInt32();
@@ -49,7 +44,8 @@ namespace TwpfTool
                 reader.BaseStream.Position = returnPos;
             }
             groupOffsets[0] = (int)reader.BaseStream.Position;
-
+            
+            //groups
             groups = new List<TwpGroup>();
             foreach (int groupOffset in groupOffsets)
             {
@@ -65,39 +61,34 @@ namespace TwpfTool
             writer.Write(sign.ToCharArray());
             writer.Write((byte)1);
             writer.Write((int)writer.BaseStream.Position + 4);
+
             //offsets
             writer.Write(groups.Count);
-            long offsetToTagCount = writer.BaseStream.Position;
-            writer.Write(0);
             long offsetToGroupOffsets = writer.BaseStream.Position;
-            for (int i = 0; i < groups.Count - 1; i++)
-            {
+            for (int i = 0; i < groups.Count; i++)
                 writer.Write(0);
-            }
+
+            //groups
             foreach (TwpGroup group in groups)
             {
                 int index = groups.IndexOf(group);
-                if (index>0)
-                {
-                    long returnPos = writer.BaseStream.Position;
-                    writer.BaseStream.Position = offsetToGroupOffsets + (index-1) * 4;
-                    writer.Write((int)returnPos);
-                    writer.BaseStream.Position = returnPos;
-                }
+                long returnPos = writer.BaseStream.Position;
+                writer.BaseStream.Position = offsetToGroupOffsets + (index) * 4;
+                writer.Write((int)returnPos);
+                writer.BaseStream.Position = returnPos;
                 group.Write(writer);
             }
+
+            //tag offsets and indices
             Dictionary<string,ushort> tagEnum = new Dictionary<string, ushort>();
             ushort tagIndex = 0;
             List<uint> offsetsToTagNames = new List<uint>();
             foreach (TwpGroup group in groups)
-            {
-                foreach(TwpParamTagGroup tagGroup in group.paramTagGroups)
-                {
+                foreach (TwpParamTagGroup tagGroup in group.paramTagGroups)
                     foreach (TwpParamTagDefs paramTagDefs in tagGroup.paramTagDefs)
-                    {
                         if (!tagEnum.ContainsKey(paramTagDefs.tagName))
                         {
-                            tagEnum.Add(paramTagDefs.tagName,tagIndex);
+                            tagEnum.Add(paramTagDefs.tagName, tagIndex);
 
                             offsetsToTagNames.Insert(tagIndex, (uint)writer.BaseStream.Position);
 
@@ -108,9 +99,7 @@ namespace TwpfTool
 
                             tagIndex++;
                         }
-                    }
-                }
-            }
+
             writer.BaseStream.Position = 20 + (groups.Count * 4);
             foreach (TwpGroup group in groups)
             {
@@ -151,9 +140,11 @@ namespace TwpfTool
                     writer.BaseStream.Position += 4;
                 }
             }
-            writer.BaseStream.Position = offsetToTagCount;
-            tagIndex += 3;
-            writer.Write(tagIndex);
+
+            //tag count
+            //writer.BaseStream.Position = offsetToTagCount;
+            //tagIndex+=2;
+            //writer.Write(tagIndex);
         }
     }
 }

@@ -41,23 +41,17 @@ namespace TwpfTool
                 text = text.Substring(ASSETS_CONST.Length);
 
                 if (text.StartsWith("tpptest"))
-                {
                     metaFlag = true;
-                }
             }
             else
-            {
                 metaFlag = true;
-            }
 
             text = text.TrimStart('/');
 
             const ulong seed0 = 0x9ae16a3b2f90404f;
             byte[] seed1Bytes = new byte[sizeof(ulong)];
             for (int i = text.Length - 1, j = 0; i >= 0 && j < sizeof(ulong); i--, j++)
-            {
                 seed1Bytes[j] = Convert.ToByte(text[i]);
-            }
 
             ulong seed1 = BitConverter.ToUInt64(seed1Bytes, 0);
             ulong maskedHash = CityHash.CityHash.CityHash64WithSeeds(text, seed0, seed1) & 0x3FFFFFFFFFFFF;

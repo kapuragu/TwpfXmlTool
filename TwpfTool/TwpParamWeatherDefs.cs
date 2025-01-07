@@ -74,9 +74,7 @@ namespace TwpfTool
 
             long offsetToKeyOffsets = writer.BaseStream.Position;
             for (int i = 0; i < paramKeys.Count; i++)
-            {
                 writer.Write(0);
-            }
 
             foreach (TwpParamKey paramKey in paramKeys)
             {

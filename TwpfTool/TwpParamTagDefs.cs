@@ -34,9 +34,7 @@ namespace TwpfTool
             ushort tagIndex = reader.ReadUInt16();
             byte padding = reader.ReadByte();
             if (padding!=0)
-            {
                 throw new ArgumentOutOfRangeException();
-            }
             if (Program.IsVerbose)
                 Console.WriteLine($"Tag name: {tagName}, Weather count: {weatherCount}, Tag index: {tagIndex}");
 
@@ -59,14 +57,12 @@ namespace TwpfTool
         public void Write(BinaryWriter writer, ParamType paramType)
         {
             long offsetToStart = writer.BaseStream.Position;
-            writer.Write(0);//tagOffset
+            writer.Write(0);            //tagOffset
             writer.Write((byte)weatherDefs.Count);
-            writer.Write((ushort)0);//tagIndex + 5
+            writer.Write((ushort)0);    //tagIndex
             writer.Write((byte)0);
             for (int i = 0; i < weatherDefs.Count; i++)
-            {
-                writer.Write(0);//+8+(i*4)
-            }
+                writer.Write(0);
             foreach (TwpParamWeatherDefs weatherDef in weatherDefs)
             {
                 int index = weatherDefs.IndexOf(weatherDef);
@@ -78,8 +74,6 @@ namespace TwpfTool
 
                 weatherDef.Write(writer, paramType);
             }
-
-            //TODO tags
         }
     }
 }

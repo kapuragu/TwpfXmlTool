@@ -54,10 +54,8 @@ namespace TwpfTool
             writer.Write((ushort)groupType);
             long offsetToTagGroupOffsets = writer.BaseStream.Position;
             for (int i = 0; i < paramTagGroups.Count; i++)
-            {
                 writer.Write(0);
-            }
-            foreach(TwpParamTagGroup paramTagGroup in paramTagGroups)
+            foreach (TwpParamTagGroup paramTagGroup in paramTagGroups)
             {
                 int index = paramTagGroups.IndexOf(paramTagGroup);
 
