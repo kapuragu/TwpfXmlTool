@@ -35,8 +35,8 @@ namespace TwpfTool
         TppGlobalVolumetricFog_exposureOffset2_Ev=274,
         TppGlobalVolumetricFog_power=275,
         TppGlobalVolumetricFog_fogDirLightGain=276,
-        TppGlobalVolumetricFog_density_noise0_ratio=277,
-        TppGlobalVolumetricFog_density_envelope0_add=278,
+        TppGlobalVolumetricFog_density_envelope0_add = 277,
+        TppGlobalVolumetricFog_density_noise0_ratio = 278,
         // TppAtmosphere
         TppAtmosphere_GZ_mieAnisotropy=513,//twpfs go from 0.2 at night to 1 in day, datasets do 0.8 and ofCloudySky 0.2
         TppAtmosphere_daySkyAmbientScale=514, //0 in avatar_space and low in volginride, 0.5 in nonsunny
@@ -154,7 +154,7 @@ namespace TwpfTool
         LineSSAOParameters_maxDistanceThresholdOuter=1294,
     
         //WeatherParameters
-        WeatherParameters_raininess=1793,//1793 Float - rain strength (RAINY always 1, in gntn RAINY is 0.5 and POURING is 1, other weathers 0)
+        WeatherParameters_raininess=1793,//rain strength (RAINY always 1, in gntn RAINY is 0.5 and POURING is 1, other weathers 0)
         WeatherParameters_windSpeed=1794,
         WeatherParameters_speedTurbulentRate=1795,
         WeatherParameters_speedTurbulentCycle=1796,
